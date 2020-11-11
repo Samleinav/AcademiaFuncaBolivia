@@ -1,4 +1,5 @@
-﻿using Android.Webkit;
+﻿using AcademiaFuncaBolivia.Commons;
+using Android.Webkit;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -16,7 +17,7 @@ namespace AcademiaFuncaBolivia
         public MainPage()
         {
             InitializeComponent();
-            this.academiaView.Source = new UrlWebViewSource() { Url = "https://academia.funcabolivia.com/" };
+            this.academiaView.Source = new UrlWebViewSource() { Url = Contants.INDEX_URL };
         }
     }
 }
