@@ -17,7 +17,6 @@ namespace AcademiaFuncaBolivia
         {
             InitializeComponent();
             this.academiaView.Source = new UrlWebViewSource() { Url = "https://academia.funcabolivia.com/" };
-            var cookieHeader = CookieManager.Instance.GetCookie("https://academia.funcabolivia.com/");
         }
     }
 }
