@@ -40,6 +40,7 @@
     <AndroidPackageFormat>apk</AndroidPackageFormat>
     <Debugger>Xamarin</Debugger>
     <AndroidKeyStore>false</AndroidKeyStore>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -67,6 +68,7 @@
     <AndroidSigningStorePass>academiafunca</AndroidSigningStorePass>
     <AndroidSigningKeyAlias>Academia Funca</AndroidSigningKeyAlias>
     <AndroidSigningKeyPass>academiafunca</AndroidSigningKeyPass>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Mono.Android" />

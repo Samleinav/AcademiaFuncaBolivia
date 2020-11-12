@@ -5,6 +5,7 @@ using AcademiaFuncaBolivia.Droid;
 using AcademiaFuncaBolivia.Models;
 using Android.App;
 using Android.Content;
+using Android.Content.PM;
 using Android.Graphics;
 using Android.Views;
 using Android.Webkit;
@@ -14,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using System.Text.RegularExpressions;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 using Xamarin.Forms.PlatformConfiguration.AndroidSpecific;
@@ -91,12 +93,23 @@ namespace DemoXamarin.Droid.Renderers
         {
             this.context = context;
         }
-
+       
         public override bool ShouldOverrideUrlLoading(WebView view, string url)
         {
+            if (url != null && url.StartsWith("zoomus://"))
+            {
+                Android.Net.Uri uri = Android.Net.Uri.Parse(url);
+                var intent = new Intent(Intent.ActionView, uri);
+                context.StartActivity(intent);
+                
+                return true;
+            }
+            
             view.LoadUrl(url);
             return true;
         }
+
+      
 
         public override void OnPageStarted(WebView view, string url, Bitmap favicon)
         {
@@ -124,5 +137,7 @@ namespace DemoXamarin.Droid.Renderers
         {
             base.OnReceivedError(view, request, error);
         }
+
+       
     }
 }
