@@ -1,30 +1,23 @@
-﻿using AcademiaFuncaBolivia;
-using AcademiaFuncaBolivia.Commons;
+﻿using AcademiaFuncaBolivia.Commons;
 using AcademiaFuncaBolivia.Controls;
 using AcademiaFuncaBolivia.Droid;
 using AcademiaFuncaBolivia.Models;
-using Android.App;
 using Android.Content;
-using Android.Content.PM;
 using Android.Graphics;
-using Android.Views;
 using Android.Webkit;
-using DemoXamarin.Droid.Renderers;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
-using System.Text.RegularExpressions;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
-using Xamarin.Forms.PlatformConfiguration.AndroidSpecific;
 using static Android.Webkit.WebSettings;
 using Cookie = System.Net.Cookie;
 using WebView = Android.Webkit.WebView;
 
 [assembly: ExportRenderer(typeof(CookieWebView), typeof(CookieWebViewRenderer))]
-namespace DemoXamarin.Droid.Renderers
+namespace AcademiaFuncaBolivia.Droid
 {
     public class CookieWebViewRenderer : WebViewRenderer
     {
@@ -47,9 +40,14 @@ namespace DemoXamarin.Droid.Renderers
 
             var fileName = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Cookie.json");
 
-            if (!File.Exists(fileName) && UserInfo.CookieContainer.Count < 1)
+            if (!File.Exists(fileName))
             {
                 await App.Current.MainPage.Navigation.PushModalAsync(new LoginView());
+                if (UserInfo.CookieContainer.Count < 1)
+                {
+                    this.LoadUrl(Contants.LOGIN_URL);
+                    return;
+                }
                 return;
             }
 
@@ -59,7 +57,7 @@ namespace DemoXamarin.Droid.Renderers
             if (File.Exists(fileName) && CookieHelper.IsExpiredCookie(currentCookies))
             {
                 File.Delete(fileName);
-                await App.Current.MainPage.Navigation.PushModalAsync(new LoginView());
+                this.LoadUrl(Contants.LOGIN_URL);
                 return;
             }
 
@@ -94,18 +92,20 @@ namespace DemoXamarin.Droid.Renderers
             this.context = context;
         }
        
-        public override bool ShouldOverrideUrlLoading(WebView view, string url)
+        public override bool ShouldOverrideUrlLoading(WebView view, IWebResourceRequest request)
         {
-            if (url != null && url.StartsWith("zoomus://"))
+            Android.Net.Uri url = request.Url;
+
+            if (url != null && url.ToString().StartsWith("zoomus://"))
             {
-                Android.Net.Uri uri = Android.Net.Uri.Parse(url);
+                Android.Net.Uri uri = Android.Net.Uri.Parse("zoomus://");
                 var intent = new Intent(Intent.ActionView, uri);
                 context.StartActivity(intent);
                 
                 return true;
             }
             
-            view.LoadUrl(url);
+            view.LoadUrl(url.ToString());
             return true;
         }
 
